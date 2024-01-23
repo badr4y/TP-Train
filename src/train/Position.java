@@ -20,8 +20,8 @@ package train;
  * @version 0.3
  */
 public class Position implements Cloneable {
-	private final Direction direction;
-	private final Element pos;
+	private Direction direction;
+	private Element pos;
 
 	public Position(Element elt, Direction d) {
 		if (elt == null || d == null)
@@ -44,12 +44,33 @@ public class Position implements Cloneable {
 	public Element getPos() {
 		return pos;
 	}
-
+	
+	public Direction getDirection() {
+		return direction;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder(this.pos.toString());
 		result.append(" going ");
 		result.append(this.direction);
 		return result.toString();
+	}
+	
+	public void changeDirection() {
+		if (direction == Direction.LR) {
+			direction = Direction.RL;
+		} else {
+			direction = Direction.LR;
+		}
+	}
+	
+	
+	
+	public void changeElement() {
+		if (pos.next(direction) == null) {
+			this.changeDirection();
+		}
+		this.pos = pos.next(direction);
 	}
 }

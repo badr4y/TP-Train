@@ -1,6 +1,8 @@
 package train;
 
 
+import java.util.List;
+
 /**
  * Représentation d'un circuit constitué d'éléments de voie ferrée : gare ou
  * section de voie
@@ -9,9 +11,9 @@ package train;
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
 public class Railway {
-	private final Element[] elements;
+	private final List<Element> elements;
 
-	public Railway(Element[] elements) {
+	public Railway(List<Element> elements) {
 		if(elements == null)
 			throw new NullPointerException();
 		
@@ -19,7 +21,11 @@ public class Railway {
 		for (Element e : elements)
 			e.setRailway(this);
 	}
-
+	
+	public List<Element> getElements() {
+		return elements;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();

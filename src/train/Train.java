@@ -32,6 +32,10 @@ public class Train {
 		this.name = name;
 		this.pos = p.clone();
 	}
+	
+	public void move() {
+		this.pos.changeElement();
+	}
 
 	@Override
 	public String toString() {

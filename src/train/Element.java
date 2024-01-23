@@ -30,6 +30,20 @@ public abstract class Element {
 		
 		this.railway = r;
 	}
+	
+	public Element next(Direction dir) {
+		int currentIndex = railway.getElements().indexOf(this);
+		int elementsSize = railway.getElements().size();
+		
+		if (currentIndex != -1) {
+			if (dir == Direction.LR && currentIndex < elementsSize - 1) {
+				return railway.getElements().get(currentIndex + 1);
+			} else if (dir == Direction.RL && currentIndex > 0) {
+				return railway.getElements().get(currentIndex - 1);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public String toString() {

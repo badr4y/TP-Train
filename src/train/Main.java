@@ -1,5 +1,8 @@
 package train;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Fabien Dagnat <fabien.dagnat@imt-atlantique.fr>
  */
@@ -10,20 +13,41 @@ public class Main {
 		Section AB = new Section("AB");
 		Section BC = new Section("BC");
 		Section CD = new Section("CD");
-		Railway r = new Railway(new Element[] { A, AB, BC, CD, D });
+		List<Element> elements = new LinkedList<>();
+		elements.add(A);
+		elements.add(AB);
+		elements.add(BC);
+		elements.add(CD);
+		elements.add(D);
+		Railway r = new Railway(elements);
+		
 		System.out.println("The railway is:");
 		System.out.println("\t" + r);
 		Position p = new Position(A, Direction.LR);
 		try {
 			Train t1 = new Train("1", p);
-			Train t2 = new Train("2", p);
-			Train t3 = new Train("3", p);
 			System.out.println(t1);
-			System.out.println(t2);
-			System.out.println(t3);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
+			t1.move();
+			System.out.println(t1);
 		} catch (BadPositionForTrainException e) {
 			System.out.println("Le train " + e.getMessage());
 		}
+		
+		
 
 	}
 }
