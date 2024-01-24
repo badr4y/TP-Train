@@ -45,10 +45,6 @@ public class Position implements Cloneable {
 		return pos;
 	}
 	
-	public Direction getDirection() {
-		return direction;
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder(this.pos.toString());
@@ -67,10 +63,11 @@ public class Position implements Cloneable {
 	
 	
 	
-	public void changeElement() {
+	public synchronized void changeElement() throws InterruptedException {
 		if (pos.next(direction) == null) {
 			this.changeDirection();
 		}
+		pos.next(direction).arrive();
 		this.pos = pos.next(direction);
 	}
 }

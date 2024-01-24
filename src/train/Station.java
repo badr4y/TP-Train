@@ -10,6 +10,7 @@ package train;
  */
 public class Station extends Element {
 	private final int size;
+	private int count;
 
 	public Station(String name, int size) {
 		super(name);
@@ -17,4 +18,19 @@ public class Station extends Element {
 			throw new NullPointerException();
 		this.size = size;
 	}
+	
+	@Override
+	synchronized void arrive() throws InterruptedException {
+		while(count==size) {
+			wait();
+		}
+		count++;
+	}
+	
+	@Override
+	synchronized void depart() {
+		count--;
+		notifyAll();
+	}
+	
 }

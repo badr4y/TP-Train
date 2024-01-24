@@ -23,6 +23,9 @@ public abstract class Element {
 		
 		this.name = name;
 	}
+	
+	abstract void arrive() throws InterruptedException;
+	abstract void depart();
 
 	public void setRailway(Railway r) {
 		if(r == null)

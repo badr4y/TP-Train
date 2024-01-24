@@ -1,5 +1,7 @@
 package train;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,42 +9,35 @@ import java.util.List;
  * @author Fabien Dagnat <fabien.dagnat@imt-atlantique.fr>
  */
 public class Main {
-	public static void main(String[] args) {
-		Station A = new Station("GareA", 3);
-		Station D = new Station("GareD", 3);
-		Section AB = new Section("AB");
-		Section BC = new Section("BC");
-		Section CD = new Section("CD");
-		List<Element> elements = new LinkedList<>();
-		elements.add(A);
-		elements.add(AB);
-		elements.add(BC);
-		elements.add(CD);
-		elements.add(D);
-		Railway r = new Railway(elements);
+	public static void main(String[] args) throws InterruptedException{
+		List<Element> elements = new ArrayList<>();
+		Station stationA = new Station("StationA", 3);
+		Station stationB = new Station("StationB", 3);
+		Section sectionAB = new Section("AB");
+		Section sectionBC = new Section("BC");
+		Section sectionCD = new Section("CD");
+		elements.addAll(Arrays.asList(stationA, sectionAB, sectionBC, sectionCD, stationB));
+		
+		Railway railway = new Railway(elements);
 		
 		System.out.println("The railway is:");
-		System.out.println("\t" + r);
-		Position p = new Position(A, Direction.LR);
+		System.out.println("\t" + railway);
+		
+		// Create trains
+		Position initialPosition = new Position(stationA, Direction.LR);
 		try {
-			Train t1 = new Train("1", p);
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
-			t1.move();
-			System.out.println(t1);
+			Train train1 = new Train("Train1", initialPosition);
+			Train train2 = new Train("Train2", initialPosition);
+			Train train3 = new Train("Train3", initialPosition);
+			
+			// Create and start threads for trains
+			Thread thread1 = new Thread(train1);
+			Thread thread2 = new Thread(train2);
+			Thread thread3 = new Thread(train3);
+			
+			thread1.start();
+			thread2.start();
+			thread3.start();
 		} catch (BadPositionForTrainException e) {
 			System.out.println("Le train " + e.getMessage());
 		}
