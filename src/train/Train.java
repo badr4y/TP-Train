@@ -33,11 +33,9 @@ public class Train implements Runnable {
 		this.pos = p.clone();
 	}
 	
-	public synchronized void move() throws InterruptedException {
-		synchronized (pos.getPos()) {
+	public void move() throws InterruptedException {
 			this.pos.changeElement();
 			System.out.println(this);
-		}
 	}
 	
 	
@@ -51,28 +49,30 @@ public class Train implements Runnable {
 		return result.toString();
 	}
 	
-	private void depart() throws InterruptedException {
+	private synchronized void depart() throws InterruptedException {
 		pos.getPos().depart(pos.getDirection());
 	}
 	
-	private void arrive() throws InterruptedException {
+	private synchronized void arrive() throws InterruptedException {
 		pos.getPos().arrive();
+	}
+	
+	private void handleInterruptedException(InterruptedException e) {
+		// Perform any necessary cleanup
+		Thread.currentThread().interrupt(); // Reset interrupted status
+		throw new RuntimeException("Thread interrupted", e);
 	}
 	
 	@Override
 	public void run() {
-		while(true) {
+		while(!Thread.interrupted()) {
 			try {
+				depart();
 				move();
-				Thread.sleep(2000);
-				depart(); // Move this line here
-			} catch(InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-			try {
+				Thread.sleep(1000);
 				arrive();
 			} catch(InterruptedException e) {
-				throw new RuntimeException(e);
+				handleInterruptedException(e);
 			}
 		}
 	}

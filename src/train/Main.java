@@ -2,14 +2,13 @@ package train;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author Fabien Dagnat <fabien.dagnat@imt-atlantique.fr>
  */
 public class Main {
-	public static void main(String[] args) throws InterruptedException{
+	public static void main(String[] args) {
 		List<Element> elements = new ArrayList<>();
 		Station stationA = new Station("StationA", 3);
 		Station stationB = new Station("StationB", 3);
@@ -17,7 +16,7 @@ public class Main {
 		Section sectionBC = new Section("BC");
 		Section sectionCD = new Section("CD");
 		elements.addAll(Arrays.asList(stationA, sectionAB, sectionBC, sectionCD, stationB));
-//		elements.addAll(Arrays.asList(stationA, sectionAB, stationB));
+
 		Railway railway = new Railway(elements);
 		
 		System.out.println("The railway is:");
@@ -30,6 +29,7 @@ public class Main {
 			Train train2 = new Train("Train2", initialPosition);
 			Train train3 = new Train("Train3", initialPosition);
 			
+			stationA.setCount(3);
 			// Create and start threads for trains
 			Thread thread1 = new Thread(train1);
 			Thread thread2 = new Thread(train2);

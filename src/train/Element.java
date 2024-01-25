@@ -15,7 +15,6 @@ package train;
  */
 public abstract class Element {
 	private final String name;
-	protected boolean available;
 	protected Railway railway;
 
 	protected Element(String name) {
@@ -23,15 +22,23 @@ public abstract class Element {
 			throw new NullPointerException();
 		
 		this.name = name;
-		this.available = true;
 	}
 	
-	abstract void setAvailable();
+	public abstract boolean isAvailable();
 	
-	abstract boolean isAvailable();
+	public abstract void reserve();
 	
+	public abstract void release();
 	abstract void arrive() throws InterruptedException;
-	abstract void depart(Direction dir) throws InterruptedException;
+	synchronized void depart(Direction dir) throws InterruptedException {
+		while(!this.next(dir).isAvailable()) {
+			this.wait();
+		}
+		this.next(dir).reserve();
+		this.release();
+		this.notifyAll();
+	};
+	
 
 	public void setRailway(Railway r) {
 		if(r == null)
@@ -41,14 +48,14 @@ public abstract class Element {
 	}
 	
 	public Element next(Direction dir) {
-		int currentIndex = railway.getElements().indexOf(this);
-		int elementsSize = railway.getElements().size();
+		int currentIndex = railway.elements().indexOf(this);
+		int elementsSize = railway.elements().size();
 		
 		if (currentIndex != -1) {
 			if (dir == Direction.LR && currentIndex < elementsSize - 1) {
-				return railway.getElements().get(currentIndex + 1);
+				return railway.elements().get(currentIndex + 1);
 			} else if (dir == Direction.RL && currentIndex > 0) {
-				return railway.getElements().get(currentIndex - 1);
+				return railway.elements().get(currentIndex - 1);
 			}
 		}
 		return null;

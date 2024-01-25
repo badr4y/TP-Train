@@ -20,36 +20,29 @@ public class Station extends Element {
 		this.count = 0;
 	}
 	
-	@Override
-	void setAvailable() {
-		if(count == size-1) {
-			available=false;
-		}
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 	@Override
-	boolean isAvailable() {
-		return count < size;
+	public boolean isAvailable() {
+		return count < size ;
 	}
+	
+	@Override
+	public synchronized void reserve() {
+		count++;
+	}
+	
+	@Override
+	public void release() {
+		count--;
+	}
+	
 	
 	@Override
 	synchronized void arrive() throws InterruptedException {
-		count++;
-		notifyAll();
-	}
 	
-	@Override
-	synchronized void depart(Direction dir) throws InterruptedException {
-		while(!this.next(dir).isAvailable()) {
-			wait();
-		}
-		if (count>0) {
-			count--;
-		}
-		this.next(dir).setAvailable();
-		this.setAvailable();
-		notifyAll();
 	}
-	
 	
 }
