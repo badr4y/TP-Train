@@ -17,20 +17,39 @@ public class Station extends Element {
 		if(name == null || size <=0)
 			throw new NullPointerException();
 		this.size = size;
+		this.count = 0;
+	}
+	
+	@Override
+	void setAvailable() {
+		if(count == size-1) {
+			available=false;
+		}
+	}
+	
+	@Override
+	boolean isAvailable() {
+		return count < size;
 	}
 	
 	@Override
 	synchronized void arrive() throws InterruptedException {
-		while(count==size) {
-			wait();
-		}
 		count++;
+		notifyAll();
 	}
 	
 	@Override
-	synchronized void depart() {
-		count--;
+	synchronized void depart(Direction dir) throws InterruptedException {
+		while(!this.next(dir).isAvailable()) {
+			wait();
+		}
+		if (count>0) {
+			count--;
+		}
+		this.next(dir).setAvailable();
+		this.setAvailable();
 		notifyAll();
 	}
+	
 	
 }

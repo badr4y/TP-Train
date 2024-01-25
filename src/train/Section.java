@@ -14,17 +14,28 @@ public class Section extends Element {
 		this.full = false;
 	}
 	
+	public synchronized void setAvailable() {
+		available = !available;
+	}
+	
+	@Override
+	boolean isAvailable() {
+		return available;
+	}
+	
 	@Override
 	public synchronized void arrive() throws InterruptedException {
-		while(full) {
-			wait();
-		}
 		full = true;
 	}
 	
 	@Override
-	public synchronized void depart() {
+	public synchronized void depart(Direction dir) throws InterruptedException {
+		while(!this.next(dir).isAvailable()) {
+			wait();
+		}
 		full = false;
+		this.next(dir).setAvailable();
+		this.setAvailable();
 		notifyAll();
 	}
 }

@@ -15,6 +15,7 @@ package train;
  */
 public abstract class Element {
 	private final String name;
+	protected boolean available;
 	protected Railway railway;
 
 	protected Element(String name) {
@@ -22,10 +23,15 @@ public abstract class Element {
 			throw new NullPointerException();
 		
 		this.name = name;
+		this.available = true;
 	}
 	
+	abstract void setAvailable();
+	
+	abstract boolean isAvailable();
+	
 	abstract void arrive() throws InterruptedException;
-	abstract void depart();
+	abstract void depart(Direction dir) throws InterruptedException;
 
 	public void setRailway(Railway r) {
 		if(r == null)

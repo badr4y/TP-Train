@@ -17,7 +17,7 @@ public class Main {
 		Section sectionBC = new Section("BC");
 		Section sectionCD = new Section("CD");
 		elements.addAll(Arrays.asList(stationA, sectionAB, sectionBC, sectionCD, stationB));
-		
+//		elements.addAll(Arrays.asList(stationA, sectionAB, stationB));
 		Railway railway = new Railway(elements);
 		
 		System.out.println("The railway is:");

@@ -64,10 +64,13 @@ public class Position implements Cloneable {
 	
 	
 	public synchronized void changeElement() throws InterruptedException {
+		this.pos = pos.next(direction);
 		if (pos.next(direction) == null) {
 			this.changeDirection();
 		}
-		pos.next(direction).arrive();
-		this.pos = pos.next(direction);
+	}
+	
+	public Direction getDirection() {
+		return direction;
 	}
 }

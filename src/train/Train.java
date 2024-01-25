@@ -51,13 +51,26 @@ public class Train implements Runnable {
 		return result.toString();
 	}
 	
+	private void depart() throws InterruptedException {
+		pos.getPos().depart(pos.getDirection());
+	}
+	
+	private void arrive() throws InterruptedException {
+		pos.getPos().arrive();
+	}
+	
 	@Override
 	public void run() {
 		while(true) {
-			pos.getPos().depart();
 			try {
-				this.move();
+				move();
 				Thread.sleep(2000);
+				depart(); // Move this line here
+			} catch(InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			try {
+				arrive();
 			} catch(InterruptedException e) {
 				throw new RuntimeException(e);
 			}
