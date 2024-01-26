@@ -30,7 +30,7 @@ public abstract class Element {
 	
 	public abstract void release();
 	abstract void arrive() throws InterruptedException;
-	synchronized void depart(Direction dir) throws InterruptedException {
+	public synchronized void depart(Direction dir) throws InterruptedException {
 		while(!this.next(dir).isAvailable()) {
 			this.wait();
 		}

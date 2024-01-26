@@ -15,7 +15,7 @@ public class Section extends Element {
 	}
 	
 	@Override
-	public boolean isAvailable() {
+	public synchronized boolean isAvailable() {
 		return !full;
 	}
 	

@@ -33,7 +33,7 @@ public class Train implements Runnable {
 		this.pos = p.clone();
 	}
 	
-	public void move() throws InterruptedException {
+	public void move() {
 			this.pos.changeElement();
 			System.out.println(this);
 	}
@@ -49,11 +49,11 @@ public class Train implements Runnable {
 		return result.toString();
 	}
 	
-	private synchronized void depart() throws InterruptedException {
+	private void depart() throws InterruptedException {
 		pos.getPos().depart(pos.getDirection());
 	}
 	
-	private synchronized void arrive() throws InterruptedException {
+	private void arrive() throws InterruptedException {
 		pos.getPos().arrive();
 	}
 	
