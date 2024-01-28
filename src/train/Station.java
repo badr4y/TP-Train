@@ -25,8 +25,13 @@ public class Station extends Element {
 	}
 	
 	@Override
-	public boolean isAvailable() {
+	public synchronized boolean isAvailable() {
 		return count < size ;
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return count == 0;
 	}
 	
 	@Override
@@ -35,14 +40,8 @@ public class Station extends Element {
 	}
 	
 	@Override
-	public void release() {
+	public synchronized void release() {
 		count--;
-	}
-	
-	
-	@Override
-	synchronized void arrive() throws InterruptedException {
-	
 	}
 	
 }

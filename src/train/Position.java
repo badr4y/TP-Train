@@ -61,10 +61,10 @@ public class Position implements Cloneable {
 		}
 	}
 	
-	
-	
-	public void changeElement() {
+	public synchronized void changeElement() {
+		Element saved = this.pos;
 		this.pos = pos.next(direction);
+		pos.setPrevious(saved);
 		if (pos.next(direction) == null) {
 			this.changeDirection();
 		}

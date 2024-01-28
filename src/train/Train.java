@@ -33,11 +33,10 @@ public class Train implements Runnable {
 		this.pos = p.clone();
 	}
 	
-	public void move() {
-			this.pos.changeElement();
-			System.out.println(this);
+	public synchronized void move() {
+		this.pos.changeElement();
+		System.out.println(this);
 	}
-	
 	
 	@Override
 	public String toString() {
@@ -69,7 +68,7 @@ public class Train implements Runnable {
 			try {
 				depart();
 				move();
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 				arrive();
 			} catch(InterruptedException e) {
 				handleInterruptedException(e);

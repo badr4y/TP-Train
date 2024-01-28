@@ -14,6 +14,7 @@ package train;
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
 public abstract class Element {
+	protected Element previous;
 	private final String name;
 	protected Railway railway;
 
@@ -22,28 +23,46 @@ public abstract class Element {
 			throw new NullPointerException();
 		
 		this.name = name;
+		this.previous = null;
+	}
+	
+	public Element getPrevious() {
+		return previous;
+	}
+	
+	public void setPrevious(Element previous) {
+		this.previous = previous;
 	}
 	
 	public abstract boolean isAvailable();
 	
+	public abstract boolean isEmpty();
+	
 	public abstract void reserve();
 	
 	public abstract void release();
-	abstract void arrive() throws InterruptedException;
 	public synchronized void depart(Direction dir) throws InterruptedException {
-		while(!this.next(dir).isAvailable()) {
+		while (!this.next(dir).isAvailable()) {
 			this.wait();
 		}
 		this.next(dir).reserve();
 		this.release();
-		this.notifyAll();
-	};
+	}
 	
-
+	public void arrive() {
+		synchronized(this.previous) {
+			this.previous.notifyAll();
+		}
+		if (previous.isEmpty() && this.previous.getPrevious() != null) {
+			synchronized(this.previous.getPrevious()) {
+				this.previous.getPrevious().notifyAll();
+			}
+		}
+	}
+	
 	public void setRailway(Railway r) {
 		if(r == null)
 			throw new NullPointerException();
-		
 		this.railway = r;
 	}
 	
@@ -65,4 +84,5 @@ public abstract class Element {
 	public String toString() {
 		return this.name;
 	}
+	
 }

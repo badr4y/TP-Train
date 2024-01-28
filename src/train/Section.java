@@ -19,6 +19,11 @@ public class Section extends Element {
 		return !full;
 	}
 	
+	@Override
+	public boolean isEmpty() {
+		return !full;
+	}
+	
 	public synchronized void reserve() {
 		full = true;
 	}
@@ -26,11 +31,5 @@ public class Section extends Element {
 	@Override
 	public synchronized void release() {
 		full = false;
-		notifyAll();
-	}
-	
-	
-	@Override
-	public synchronized void arrive() throws InterruptedException {
 	}
 }
