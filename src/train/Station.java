@@ -44,4 +44,19 @@ public class Station extends Element {
 		count--;
 	}
 	
+	@Override
+	public synchronized void depart(Direction dir) throws InterruptedException {
+		Element pointer = this.next(dir);
+		
+		while (!(pointer instanceof Station)) {
+			while (pointer.railway.getRecord().get(pointer) != dir && pointer.railway.getRecord().get(pointer) != null) {
+				wait();
+			}
+			pointer = pointer.next(dir);
+		}
+		super.depart(dir);
+		
+	}
+	
+	
 }

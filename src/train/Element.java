@@ -55,10 +55,9 @@ public abstract class Element {
 			synchronized(this.previous.getPrevious()) {
 				this.previous.getPrevious().notifyAll();
 			}
-		} else {
-			synchronized(this.previous) {
-				this.previous.notifyAll();
-			}
+		}
+		synchronized(this.previous) {
+			this.previous.notifyAll();
 		}
 	}
 	
