@@ -46,10 +46,11 @@ public abstract class Element {
 			this.wait();
 		}
 		this.next(dir).reserve();
-//		this.release();
+		railway.getRecord().replace(this.next(dir),dir);
 	}
 	
 	public void arrive() {
+		railway.getRecord().replace(previous,null);
 		this.previous.release();
 		if (previous.isEmpty() && this.previous.getPrevious() != null) {
 			synchronized(this.previous.getPrevious()) {

@@ -10,14 +10,14 @@ import java.util.List;
 public class Main {
 	public static void main(String[] args) {
 		Station stationA = new Station("StationA", 3);
-		Station stationB = new Station("StationB", 3);
-//		Station stationC = new Station("StationC", 3);
+		Station stationB = new Station("StationB", 2);
+		Station stationC = new Station("StationC", 3);
 		Section sectionAB = new Section("AB");
 		Section sectionBC = new Section("BC");
 		Section sectionCD = new Section("CD");
-//		Section sectionMN = new Section("MN");
-//		Section sectionNP = new Section("NP");
-		List<Element> elements = new ArrayList<>(Arrays.asList(stationA, sectionAB, sectionBC, sectionCD, stationB/*, sectionMN, sectionNP, stationC*/));
+		Section sectionMN = new Section("MN");
+		Section sectionNP = new Section("NP");
+		List<Element> elements = new ArrayList<>(Arrays.asList(stationA, sectionAB, sectionBC, sectionCD, stationB, sectionMN, sectionNP, stationC));
 
 		Railway railway = new Railway(elements);
 		

@@ -55,8 +55,5 @@ public class Station extends Element {
 			pointer = pointer.next(dir);
 		}
 		super.depart(dir);
-		
 	}
-	
-	
 }

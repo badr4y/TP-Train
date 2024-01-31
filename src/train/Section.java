@@ -32,11 +32,5 @@ public class Section extends Element {
 	public synchronized void release() {
 		full = false;
 	}
-	
-	@Override
-	public synchronized void depart(Direction dir) throws InterruptedException {
-		super.depart(dir);
-		railway.getRecord().replace(this.next(dir),dir);
-		railway.getRecord().replace(this,null);
-	}
+
 }
