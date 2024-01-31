@@ -46,16 +46,18 @@ public abstract class Element {
 			this.wait();
 		}
 		this.next(dir).reserve();
-		this.release();
+//		this.release();
 	}
 	
 	public void arrive() {
-		synchronized(this.previous) {
-			this.previous.notifyAll();
-		}
+		this.previous.release();
 		if (previous.isEmpty() && this.previous.getPrevious() != null) {
 			synchronized(this.previous.getPrevious()) {
 				this.previous.getPrevious().notifyAll();
+			}
+		} else {
+			synchronized(this.previous) {
+				this.previous.notifyAll();
 			}
 		}
 	}
