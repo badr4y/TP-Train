@@ -133,3 +133,126 @@ La nouvelle condition pour l'invariant de sûreté peut être exprimée comme su
    - Un train ne peut quitter une gare que si aucune autre train n'est présent jusqu'à la prochaine station dans le sens opposé.
 
 ### Exercice 4 :
+
+Nous n'avons pas pu résoudre et intégrer une solution fonctionnelle du deadlock dans cette version du projet. Néanmoins, nous avons une idée sur la solution possible.  
+Il suffit d'implementer une methode verifyCapacity() qui vérifie si un train peut quitter une section ou une station en fonction de la direction dans laquelle il se déplace, sans dépasser la capacité maximale d'une gare intermédiaire (si elle existe). 
+
+La méthode utilise une boucle pour parcourir les sections dans la direction donnée, en comptant le nombre de sections non vides et en sauvegardant la dernière station traversée dans la variable cross. Ensuite, elle effectue une seconde boucle pour vérifier la présence de trains dans les sections adjacentes à la gare intermédiaire, en continuant jusqu'à atteindre une nouvelle station ou la fin de la ligne. La comparaison finale est faite entre le nombre total de trains et la capacité restante de la gare intermédiaire (si elle existe). Si ces conditions sont remplies, le train peut quitter la section ou la station ; sinon, il doit attendre.  
+
+Cela permet de s'assurer qu'aucun train ne quitte une section ou une station tant que cela pourrait entraîner un dépassement de capacité dans une gare intermédiaire située en aval.  
+
+Voici notre implémentation de la solution qui reste toujours incomplète :  
+```java
+           public synchronized boolean verifyCapacity(Direction dir) {
+		Element test = this.next(dir);
+		int count = 1;
+		
+		// Iterate through the sections in the given direction
+		while (test instanceof Section) {
+			if (!test.isEmpty()) {
+				count++;
+			}
+			test = test.next(dir);
+		}
+		
+		// Save the reference to the last section (cross) in the original direction
+		Element cross = test;
+		
+		// Continue iterating in the same direction, checking for occupied sections
+		while (test instanceof Section || test.next(dir) != null) {
+			test = test.next(dir);
+			if (!test.isEmpty() && test.railway.getRecord().get(test) != dir) {
+				count++;
+			}
+		}
+		
+		// Verify the count against the capacity of the cross station
+		return count <= (((Station) cross).getSize() - ((Station) cross).getCount());
+	}
+
+```
+
+## Guide d'utilisation 
+
+Ce guide vous expliquera comment créer et utiliser un système ferroviaire basé sur le modèle fourni.
+
+### Création du système ferroviaire
+
+1. Commencez par créer les éléments de votre système ferroviaire. Vous pouvez utiliser les classes `Station` et `Section` pour cela. Voici un exemple :
+
+    ```java
+    // Création des stations
+    Station stationA = new Station("StationA", 3);
+    Station stationB = new Station("StationB", 2);
+    Station stationC = new Station("StationC", 3);
+
+    // Création des sections
+    Section sectionAB = new Section("AB");
+    Section sectionBC = new Section("BC");
+    Section sectionCD = new Section("CD");
+    Section sectionMN = new Section("MN");
+    Section sectionNP = new Section("NP");
+    
+
+2. Ensuite, créez une liste d'éléments représentant votre chemin de fer. Ajoutez les éléments dans l'ordre souhaité :
+
+    ```java
+    List<Element> elements = new ArrayList<>(Arrays.asList(
+        stationA, sectionAB, sectionBC, sectionCD, stationB, sectionMN, sectionNP, stationC
+    ));
+    
+
+3. Utilisez la liste d'éléments pour créer une instance de la classe `Railway` :
+
+    ```java
+    Railway railway = new Railway(elements);
+    
+
+4. Affichez le chemin de fer pour vérifier qu'il a été correctement créé :
+
+    ```java
+    System.out.println("Le chemin de fer est :");
+    System.out.println("\t" + railway);
+    
+
+## Création des trains et démarrage du système
+
+1. Créez des positions initiales et finales pour vos trains. Utilisez ces positions pour instancier les trains :
+
+    ```java
+    Position initialPosition = new Position(stationA, Direction.LR);
+
+    Train train1 = new Train("Train1", initialPosition);
+    Train train2 = new Train("Train2", initialPosition);
+    Train train3 = new Train("Train3", initialPosition);
+    
+
+2. Configurez le nombre de trains dans les stations :
+
+    ```java
+    stationA.setCount(3);
+    
+
+3. Créez et démarrez les threads pour chaque train :
+
+    ```java
+    Thread thread1 = new Thread(train1);
+    Thread thread2 = new Thread(train2);
+    Thread thread3 = new Thread(train3);
+
+    thread1.start();
+    thread2.start();
+    thread3.start();
+    
+
+4. Gérez les éventuelles exceptions liées à la mauvaise position des trains :
+
+    ```java
+    try {
+        // Création des trains et démarrage des threads
+    } catch (BadPositionForTrainException e) {
+        System.out.println("Le train " + e.getMessage());
+    }
+    
+
+C'est tout ! Vous avez maintenant créé un système ferroviaire avec des éléments et des trains. N'hésitez pas à ajuster les positions, les nombres de trains, et autres paramètres selon vos besoins.
