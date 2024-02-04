@@ -50,16 +50,27 @@ public abstract class Element {
 	}
 	
 	public void arrive() {
-		railway.getRecord().replace(previous,null);
-		this.previous.release();
-		if (previous.isEmpty() && this.previous.getPrevious() != null) {
-			synchronized(this.previous.getPrevious()) {
-				this.previous.getPrevious().notifyAll();
+		synchronized(this) {
+			railway.getRecord().replace(previous,null);
+			this.previous.release();
+			
+		}
+//		if (previous.isEmpty() && this.previous.getPrevious() != null) {
+//			synchronized(this.previous.getPrevious()) {
+//				this.previous.getPrevious().notifyAll();
+//			}
+//		}
+//		synchronized(this.previous) {
+//			this.previous.notifyAll();
+//		}
+		
+		for (Element element : railway.elements()) {
+			synchronized((element)) {
+				element.notifyAll();
 			}
 		}
-		synchronized(this.previous) {
-			this.previous.notifyAll();
-		}
+		
+		
 	}
 	
 	public void setRailway(Railway r) {

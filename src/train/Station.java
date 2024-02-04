@@ -42,7 +42,7 @@ public class Station extends Element {
 		return count == 0;
 	}
 	
-	public boolean verifyCapacity(Direction dir) {
+	public synchronized boolean verifyCapacity(Direction dir) {
 		Element test = this.next(dir);
 		int count = 1;
 		while (test instanceof Section) {
@@ -51,7 +51,20 @@ public class Station extends Element {
 			}
 			test = test.next(dir);
 		}
-		return count < (((Station) test).getSize()-((Station) test).getCount());
+		Element cross = test;
+		if (count <= (((Station) test).getSize()-((Station) test).getCount())) {
+			if (test.next(dir) != null) {
+				test = test.next(dir);
+			}
+			while (test instanceof Section) {
+				if (!test.isEmpty() && test.railway.getRecord().get(test) != dir) {
+					count++;
+				}
+				test = test.next(dir);
+			}
+		}
+		
+		return count <= (((Station) cross).getSize()-((Station) cross).getCount());
 	}
 	
 	@Override
@@ -66,18 +79,17 @@ public class Station extends Element {
 	
 	@Override
 	public synchronized void depart(Direction dir) throws InterruptedException {
-		Element pointer = this.next(dir);
-		
+		Element nextElement = this.next(dir);
+		while (!(nextElement instanceof Station)) {
+			while (nextElement.railway.getRecord().get(nextElement) != dir && !nextElement.isEmpty()) {
+				wait();
+			}
+			nextElement = nextElement.next(dir);
+		}
 		while (!this.verifyCapacity(dir)){
 			wait();
 		}
 		
-		while (!(pointer instanceof Station)) {
-			while (pointer.railway.getRecord().get(pointer) != dir && pointer.railway.getRecord().get(pointer) != null) {
-				wait();
-			}
-			pointer = pointer.next(dir);
-		}
 		super.depart(dir);
 	}
 }
