@@ -24,32 +24,49 @@ public class Station extends Element {
 		this.count = count;
 	}
 	
+	/**
+	 * @return a boolean verifying whether the station has an available place or not
+	 */
 	@Override
 	public synchronized boolean isAvailable() {
 		return count < size ;
 	}
 	
+	/**
+	 * @return a boolean verifying whether the station is empty or not
+	 */
 	@Override
 	public boolean isEmpty() {
 		return count == 0;
 	}
 	
+	/**
+	 * reserves a place in the station by adding 1 to the count variable
+	 */
 	@Override
 	public synchronized void reserve() {
 		count++;
 	}
 	
+	/**
+	 * releases a place in the stating by subtracting 1 to the count variable
+	 */
 	@Override
 	public synchronized void release() {
 		count--;
 	}
 	
+	/**
+	 * this method is called by a train when wanting to depart from the station, it is overriding its parent method in {@link Element} to add a condition that stops the train from departing if there is a train coming in the opposite direction
+	 * @param dir represents the direction of the train departing from the station
+	 * @throws InterruptedException
+	 */
 	@Override
 	public synchronized void depart(Direction dir) throws InterruptedException {
 		Element pointer = this.next(dir);
 		
 		while (!(pointer instanceof Station)) {
-			while (pointer.railway.getRecord().get(pointer) != dir && pointer.railway.getRecord().get(pointer) != null) {
+			while (pointer.railway.getRecord().get(pointer) != dir && !pointer.isEmpty()) {
 				wait();
 			}
 			pointer = pointer.next(dir);

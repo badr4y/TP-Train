@@ -30,7 +30,15 @@ public class Position implements Cloneable {
 		this.pos = elt;
 		this.direction = d;
 	}
-
+	
+	public Direction getDirection() {
+		return direction;
+	}
+	
+	public Element getPos() {
+		return pos;
+	}
+	
 	@Override
 	public Position clone() {
 		try {
@@ -39,10 +47,6 @@ public class Position implements Cloneable {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public Element getPos() {
-		return pos;
 	}
 	
 	@Override
@@ -53,6 +57,9 @@ public class Position implements Cloneable {
 		return result.toString();
 	}
 	
+	/**
+	 * changes the direction
+	 */
 	public void changeDirection() {
 		if (direction == Direction.LR) {
 			direction = Direction.RL;
@@ -61,6 +68,9 @@ public class Position implements Cloneable {
 		}
 	}
 	
+	/**
+	 * changes the element assigned to the position of the train to the one calling the method
+	 */
 	public synchronized void changeElement() {
 		Element saved = this.pos;
 		this.pos = pos.next(direction);
@@ -70,7 +80,6 @@ public class Position implements Cloneable {
 		}
 	}
 	
-	public Direction getDirection() {
-		return direction;
-	}
+	
+	
 }

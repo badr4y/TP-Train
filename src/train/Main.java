@@ -26,12 +26,14 @@ public class Main {
 		
 		// Create trains
 		Position initialPosition = new Position(stationA, Direction.LR);
+		Position lastPosition = new Position(stationC, Direction.RL);
 		try {
 			Train train1 = new Train("Train1", initialPosition);
 			Train train2 = new Train("Train2", initialPosition);
-			Train train3 = new Train("Train3", initialPosition);
+			Train train3 = new Train("Train3", lastPosition);
 			
-			stationA.setCount(3);
+			stationA.setCount(2);
+			stationC.setCount(1);
 			// Create and start threads for trains
 			Thread thread1 = new Thread(train1);
 			Thread thread2 = new Thread(train2);

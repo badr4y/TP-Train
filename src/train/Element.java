@@ -14,7 +14,7 @@ package train;
  * @author Philippe Tanguy <philippe.tanguy@imt-atlantique.fr>
  */
 public abstract class Element {
-	protected Element previous;
+	protected Element previous; // this variable is changed each time a train is moving to this element and sets in it the previous element of the railway he came from, this variable is used when wanting to release the previous element of the train
 	private final String name;
 	protected Railway railway;
 
@@ -41,6 +41,12 @@ public abstract class Element {
 	public abstract void reserve();
 	
 	public abstract void release();
+	
+	/**
+	 * this method is called by a train when wanting to depart and leave from this element of the railway
+	 * @param dir represents the direction of the train departing from this element of the railway
+	 * @throws InterruptedException
+	 */
 	public synchronized void depart(Direction dir) throws InterruptedException {
 		while (!this.next(dir).isAvailable()) {
 			this.wait();
@@ -49,6 +55,9 @@ public abstract class Element {
 		railway.getRecord().replace(this.next(dir),dir);
 	}
 	
+	/**
+	 * this method is called by a train when arriving in a new element of the railway
+	 */
 	public void arrive() {
 		railway.getRecord().replace(previous,null);
 		this.previous.release();
@@ -68,6 +77,11 @@ public abstract class Element {
 		this.railway = r;
 	}
 	
+	/**
+	 * returns the next element on the railway in the direction given as a parameter
+	 * @param dir direction
+	 * @return
+	 */
 	public Element next(Direction dir) {
 		int currentIndex = railway.elements().indexOf(this);
 		int elementsSize = railway.elements().size();

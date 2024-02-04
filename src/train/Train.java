@@ -33,6 +33,9 @@ public class Train implements Runnable {
 		this.pos = p.clone();
 	}
 	
+	/**
+	 * moves the train
+	 */
 	public synchronized void move() {
 		this.pos.changeElement();
 		System.out.println(this);
