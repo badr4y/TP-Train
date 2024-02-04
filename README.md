@@ -15,9 +15,13 @@ Ce projet s'inscrit dans le cadre du cours sur les logiciels concurrents. Il con
 - Nous avons changé quelques parties du code initial, plusieurs attributs de classes qui étaient finals ne le sont plus, nous avons de plus opter pour l'utilisation de List au lieu d'Arrays comme Data Structure à travers le code pour sa compatibilité avec nos besoins.
 - Même si les consignes du TP nous fournissent des clés de solutions pour répondre aux problèmes confrontés au cours du développement du projet, nous avons des fois choisi de les ignorer et développer nos propres solutions.
 - Nous avons trouvé que les consignes fournies au cours du TP étaient des fois difficile à comprendre et rendent à la confusion dans notre cas. Néanmoins, nous avons essayé d'être aussi fidèle que possible aux attentes de l'évaluateur.  
-- La difficulté principale qu'on a eu est lié au fait que les conditions de départ dépendait de variables non finales et donc on trouvait parfois difficile de trouver avec quoi fallait synchroniser le bout du code qui notifiait les autres threads concernés d'un changement. En fin de compte une solution facile qu'on n'a trouvé qu'à la fin et qu'on n'a pas implémenté dans cette version du projet est de boucler sur tous les elements du railway de la sorte :  
-    ```java
-        
+  - La difficulté principale qu'on a eu est lié au fait que les conditions de départ dépendait de variables non finales et donc on trouvait parfois difficile de trouver avec quoi fallait synchroniser le bout du code qui notifiait les autres threads concernés d'un changement. En fin de compte une solution facile qu'on n'a trouvé qu'à la fin et qu'on n'a pas implémenté dans cette version du projet est de boucler sur tous les elements du railway de la sorte :  
+      ```java
+          for (Element element : railway.elements()) {
+              synchronized((element)) {
+                  element.notifyAll();
+              }
+          }
 
     
 
