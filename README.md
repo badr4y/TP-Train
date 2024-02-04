@@ -8,13 +8,19 @@ Ce projet s'inscrit dans le cadre du cours sur les logiciels concurrents. Il con
 ## Diagramme de classes final : 
 ![classDiagram.png](classDiagram.png)
 
+## Observations et remarques :
+- À part les commentaires fournis avec le code initial, nous avons choisi de commenter le code en Anglais, de même pour le choix des noms des variables et méthodes.
+- Nous avons changé quelques parties du code initial, plusieurs attributs de classes qui étaient finals ne le sont plus, nous avons de plus opter pour l'utilisation de List au lieu de Array comme Data Structure à travers le code pour sa compatibilité avec nos besoins.
+- Même si les consignes du TP nous fournissent des clés de solutions pour répondre aux problèmes confrontés au cours du développement du projet, nous avons des fois choisi de les ignorer et développer nos propres solutions.
+- Nous avons trouvé que les consignes fournies au cours du TP étaient des fois difficile à comprendre et rendent à la confusion dans notre cas. Néanmoins, nous avons essayé d'être aussi fidèle que possible aux attentes de l'évaluateur.  
+
 ## Réponses aux questions
 
 ### Roles des classes :
 
-- **Direction :** Énumération représentant la direction du mouvement sur le chemin de fer, soit "de gauche à droite" ou "de droite à gauche".
+- **Direction :** Énumération représentant la direction du mouvement sur le chemin de fer (Railway), soit LR "de gauche à droite" ou RL "de droite à gauche".
 
-- **Element :** Classe abstraite représentant un élément générique dans le système ferroviaire, tel qu'une section ou une station. Gère l'élément précédent, fournit des méthodes pour vérifier la disponibilité, la réservation, la libération et le mouvement.
+- **Element :** Classe abstraite représentant un élément générique dans le système ferroviaire (Railway), tel qu'une section ou une station. Gère l'élément précédent, fournit des méthodes pour vérifier la disponibilité, la réservation, la libération et le mouvement.
 
 - **Position :** Représente la position d'un train, comprenant l'élément actuel et la direction. Peut changer de direction et d'élément, et fournit une représentation sous forme de chaîne pour un affichage facile.
 
@@ -89,8 +95,8 @@ Les actions critiques, c'est-à-dire les méthodes qui modifient l'invariant de 
       }
       
 
-4. **Méthodes de Changement d'État (changerDirection, changerElement, etc.) :**
-    - Si votre logique nécessite des changements d'état qui affectent l'invariant de sûreté, ces méthodes doivent également être `synchronized`.
+4. **Méthodes de Changement d'État (changeDirection, changeElement, etc.) :**
+    - Ces méthodes sont implémentées au niveau de la classe Position
     - Exemples :
       ```java
       public synchronized void changeDirection() {
@@ -101,22 +107,16 @@ Les actions critiques, c'est-à-dire les méthodes qui modifient l'invariant de 
           // Logique de changement d'élément
       }
 
-## Question 3.1 : Identifiez les variables qui permettent d’exprimer la nouvelle condition.
 
-Les variables qui permettent d'exprimer la nouvelle condition pour éviter les interblocages sont les suivantes :
+### Exercice 3 : 
+Cet exercice traite le deadlock déclenché au cas où deux trains sont l'un devant l'autre ayant des directions opposés et chacun attend que l'autre vide sa section.  
+Pour traiter ce problème, nous avons décidé d'ajouter une HashMap au niveau de la classe Railway ayant comme clés les éléments du Railway et comme valeurs respectives soit la direction d'un train dans le cas où un train est dans la section ou null dans le cas contraire.  
+De cette façon, quand un train veut faire son départ d'une station, il verifie l'existence de trains allant dans le sens opposé jusqu'à le prochain train en accedant directement à la HashMap au niveau du Railway.
 
-- Une variable qui indique si un train est présent dans la gare dans un sens donné (de gauche à droite ou de droite à gauche).
-- Une variable qui indique si un train est présent dans une section dans un sens donné.
-
-## Question 3.2 : À l’aide des nouvelles variables, identifiez la nouvelle condition pour l’invariant de sûreté.
+### Question 3.2 : À l’aide des nouvelles variables, identifiez la nouvelle condition pour l’invariant de sûreté.
 
 La nouvelle condition pour l'invariant de sûreté peut être exprimée comme suit :
 
 - **Nouvel Invariant de Sûreté :**
-   - Un train ne peut quitter une gare que si aucune autre train n'est présent dans la gare dans le sens opposé.
-   - Une section ne peut être occupée que par un seul train à la fois, quel que soit le sens.
+   - Un train ne peut quitter une gare que si aucune autre train n'est présent jusqu'à la prochaine station dans le sens opposé.
 
-## Question 3.3 : Quelle est la classe responsable de la gestion de ces variables ?
-
-La classe responsable de la gestion de ces variables est la classe `Railway`. Ces variables doivent être gérées au niveau du chemin de fer (ligne de trains) pour coordonner l'accès aux différentes sections et gares dans les deux sens.  
-Concrètement, j'ai ajouté un attribut HashMap au niveau de la classe Railway ayant comme des clés les éléments du Railway et comme valeur soit `null` soit la direction du train au niveau de cet élément.
