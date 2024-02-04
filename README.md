@@ -5,14 +5,21 @@ _Groupe composé de FOURANE Badr, DAHECH Mohammed Amine._
 Ce projet s'inscrit dans le cadre du cours sur les logiciels concurrents. Il consiste en la modélisation en Java du déplacement de trains sur des rails.
 - Éditeur utilisé : `IntelliJ IDEA`
 
+
 ## Diagramme de classes final : 
 ![classDiagram.png](classDiagram.png)
 
 ## Observations et remarques :
+- Vous pouvez voir la progression du projet en accédant aux commits au niveau du repo : https://github.com/badr4y/TP-Train
 - À part les commentaires fournis avec le code initial, nous avons choisi de commenter le code en Anglais, de même pour le choix des noms des variables et méthodes.
-- Nous avons changé quelques parties du code initial, plusieurs attributs de classes qui étaient finals ne le sont plus, nous avons de plus opter pour l'utilisation de List au lieu de Array comme Data Structure à travers le code pour sa compatibilité avec nos besoins.
+- Nous avons changé quelques parties du code initial, plusieurs attributs de classes qui étaient finals ne le sont plus, nous avons de plus opter pour l'utilisation de List au lieu d'Arrays comme Data Structure à travers le code pour sa compatibilité avec nos besoins.
 - Même si les consignes du TP nous fournissent des clés de solutions pour répondre aux problèmes confrontés au cours du développement du projet, nous avons des fois choisi de les ignorer et développer nos propres solutions.
 - Nous avons trouvé que les consignes fournies au cours du TP étaient des fois difficile à comprendre et rendent à la confusion dans notre cas. Néanmoins, nous avons essayé d'être aussi fidèle que possible aux attentes de l'évaluateur.  
+- La difficulté principale qu'on a eu est lié au fait que les conditions de départ dépendait de variables non finales et donc on trouvait parfois difficile de trouver avec quoi fallait synchroniser le bout du code qui notifiait les autres threads concernés d'un changement. En fin de compte une solution facile qu'on n'a trouvé qu'à la fin et qu'on n'a pas implémenté dans cette version du projet est de boucler sur tous les elements du railway de la sorte :  
+    ```java
+        
+
+    
 
 ## Réponses aux questions
 
@@ -108,7 +115,8 @@ Les actions critiques, c'est-à-dire les méthodes qui modifient l'invariant de 
       }
 
 
-### Exercice 3 : 
+### Exercice 3 :  
+
 Cet exercice traite le deadlock déclenché au cas où deux trains sont l'un devant l'autre ayant des directions opposés et chacun attend que l'autre vide sa section.  
 Pour traiter ce problème, nous avons décidé d'ajouter une HashMap au niveau de la classe Railway ayant comme clés les éléments du Railway et comme valeurs respectives soit la direction d'un train dans le cas où un train est dans la section ou null dans le cas contraire.  
 De cette façon, quand un train veut faire son départ d'une station, il verifie l'existence de trains allant dans le sens opposé jusqu'à le prochain train en accedant directement à la HashMap au niveau du Railway.
@@ -120,3 +128,4 @@ La nouvelle condition pour l'invariant de sûreté peut être exprimée comme su
 - **Nouvel Invariant de Sûreté :**
    - Un train ne peut quitter une gare que si aucune autre train n'est présent jusqu'à la prochaine station dans le sens opposé.
 
+### Exercice 4 :
