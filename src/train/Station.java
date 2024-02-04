@@ -20,6 +20,14 @@ public class Station extends Element {
 		this.count = 0;
 	}
 	
+	public int getSize() {
+		return size;
+	}
+	
+	public int getCount() {
+		return count;
+	}
+	
 	public void setCount(int count) {
 		this.count = count;
 	}
@@ -32,6 +40,18 @@ public class Station extends Element {
 	@Override
 	public boolean isEmpty() {
 		return count == 0;
+	}
+	
+	public boolean verifyCapacity(Direction dir) {
+		Element test = this.next(dir);
+		int count = 1;
+		while (test instanceof Section) {
+			if (!test.isEmpty()) {
+				count++;
+			}
+			test = test.next(dir);
+		}
+		return count < (((Station) test).getSize()-((Station) test).getCount());
 	}
 	
 	@Override
@@ -47,6 +67,10 @@ public class Station extends Element {
 	@Override
 	public synchronized void depart(Direction dir) throws InterruptedException {
 		Element pointer = this.next(dir);
+		
+		while (!this.verifyCapacity(dir)){
+			wait();
+		}
 		
 		while (!(pointer instanceof Station)) {
 			while (pointer.railway.getRecord().get(pointer) != dir && pointer.railway.getRecord().get(pointer) != null) {
